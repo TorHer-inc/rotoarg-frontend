@@ -1,13 +1,12 @@
 import './App.css'
+import AppRouter from './router/AppRouter'
 
 function App() {
 
   return (
-    <div>
-      <h1 className='text-3xl font-bold'>
-        Rotoarg - Lista de Precios
-      </h1>
-    </div>
+    <>
+      <AppRouter />
+    </>
   )
 }
 
