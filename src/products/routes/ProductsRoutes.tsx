@@ -8,8 +8,7 @@ const ProductsRoutes = () => {
       <Navbar />
 
       <Routes>
-        <Route path='/products' element={<ProductsPage />} />
-        <Route path='/' element={<Navigate to="/products" />} />  
+        <Route path='/' element={<ProductsPage />} />
       </Routes>
     </>
   )
