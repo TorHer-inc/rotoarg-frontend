@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { Product } from '../../interfaces/products-interface';
 
 import {
@@ -11,22 +9,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-const TableDashboard = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+import EditModalForm from "./EditModalForm";
+import DeleteModalForm from "./DeleteModalForm";
 
-  useEffect(() => {
-    fetch('http://localhost:3000/products')
-      .then(response => response.json())
-      .then(data => setProducts(data.products))
-      .catch(error => console.error('Error fetching products:', error));
-  }, []);
+interface TableModalFormProps {
+  products      : Product[];
+  handleSuccess : () => void;
+  // onDeleteSuccess : () => void;
+  // onEditSuccess : () => void;
+}
+
+const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('es-ES');
   };
 
   return (
-    <div>
+    <>
       <Table>
 
         <TableHeader className="bg-orange-200">
@@ -36,6 +36,7 @@ const TableDashboard = () => {
             <TableHead className="text-center">ALTURA</TableHead>
             <TableHead className="text-center">DIAMETRO</TableHead>
             <TableHead className="text-center">PRECIO</TableHead>
+            <TableHead className="text-center">ACCIONES</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -47,12 +48,26 @@ const TableDashboard = () => {
               <TableCell className="text-center">{product.height} mm</TableCell>
               <TableCell className="text-center">{product.diameter} mm</TableCell>
               <TableCell className="text-center">${formatPrice(product.price)}</TableCell>
+              <TableCell className="text-center">
+                <div className="flex justify-center gap-4">
+                  <EditModalForm 
+                    product={product}
+                    handleSuccess={handleSuccess}
+                    // onEditSuccess={onEditSuccess}
+                  />
+                  <DeleteModalForm
+                    productId={product.id}
+                    handleSuccess={handleSuccess}
+                    // onDeleteSuccess={onDeleteSuccess}
+                  />
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
 
       </Table>
-    </div>
+    </>
   )
 }
 
