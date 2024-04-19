@@ -22,6 +22,8 @@ export default function CreateFormValidator(input: FormData): Record<string, str
     errors.capacity = "La capacidad es obligatoria";
   } else if (!/^\d+$/.test(input.capacity)) {
     errors.capacity = "La capacidad solo debe contener números";
+  } else if (input.capacity.trim().length > 4) {
+    errors.capacity = "La capacidad no debe tener más de 4 caracteres";
   }
 
   // Validación de la altura
@@ -29,6 +31,8 @@ export default function CreateFormValidator(input: FormData): Record<string, str
     errors.height = "La altura es obligatoria";
   } else if (!/^\d+$/.test(input.height)) {
     errors.height = "La altura solo debe contener números";
+  } else if (input.height.trim().length > 4) {
+    errors.height = "La altura no debe tener más de 4 caracteres";
   }
 
   // Validación del diámetro
@@ -36,6 +40,8 @@ export default function CreateFormValidator(input: FormData): Record<string, str
     errors.diameter = "El diámetro es obligatorio";
   } else if (!/^\d+$/.test(input.diameter)) {
     errors.diameter = "El diámetro solo debe contener números";
+  } else if (input.diameter.trim().length > 4) {
+    errors.diameter = "El diámetro no debe tener más de 4 caracteres";
   }
 
   // Validación del precio
@@ -49,8 +55,6 @@ export default function CreateFormValidator(input: FormData): Record<string, str
       errors.price = "El precio ingresado es inválido. Asegúrate de que esté dentro del rango permitido (de 1 a 99,999,999).";
     }
   }
-
-  // Otras validaciones para los otros campos del formulario...
 
   return errors;
 }
