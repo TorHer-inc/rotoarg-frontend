@@ -16,7 +16,6 @@ import { Plus } from "lucide-react"
 import { useState } from "react"
 import CreateFormValidator from "../validators/CreateFormValidator"
 import { toast } from "sonner"
-import formatDate from "../utils/formatDate"
 
 interface CreateModalFormProps {
   handleSuccess : () => void;
@@ -51,9 +50,6 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
     setErrors({ ...errors, [name]: newErrors[name] });
   };
 
-  const currentDate = new Date();
-  const formattedDate = formatDate(currentDate);
-
   const handleSubmit = async () => {
     const newErrors = CreateFormValidator(formData);
     setErrors(newErrors);
@@ -76,9 +72,7 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
         });
 
         setTimeout(() => {
-          toast("¡Producto creado exitosamente!", {
-            description: `Creado el ${formattedDate}`,
-          })
+          toast.success("¡Producto creado exitosamente!", { style: {background: "#0F172A"} })
         }, 130); 
         
         // toast.success(`¡Producto creado exitosamente el ${formattedDate}!`);

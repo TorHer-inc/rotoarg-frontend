@@ -13,7 +13,6 @@ import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import formatDate from "../utils/formatDate";
 
 interface DeleteModalFormProps {
   productId: string;
@@ -22,14 +21,9 @@ interface DeleteModalFormProps {
 
 const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => {
   
-  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const currentDate = new Date();
-  const formattedDate = formatDate(currentDate);
-
   const handleDeleteProduct = async () => {
-    setIsDeleting(true);
     setError(null);
 
     try {
@@ -39,13 +33,7 @@ const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => 
         console.log('Producto eliminado exitosamente');
 
         setTimeout(() => {
-          toast("¡Producto eliminado exitosamente!", {
-            description: `Creado el ${formattedDate}`,
-            // action: {
-            //   label: "Entendido!",
-            //   onClick: () => console.log("Undo"),
-            // },
-          })
+          toast.success("¡Producto eliminado exitosamente!", { style: {background: "#0F172A"} })
         }, 130); 
       } else {
         throw new Error('Failed to delete product');
@@ -53,8 +41,6 @@ const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => 
     } catch (error) {
       setError('Error deleting product');
       console.error(error);
-    } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -73,8 +59,7 @@ const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => 
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={handleDeleteProduct} disabled={isDeleting}>
-              {/* {isDeleting ? 'Eliminando...' : 'ELIMINAR PRODUCTO'} */}
+            <Button type="submit" onClick={handleDeleteProduct}>
               ELIMINAR PRODUCTO
             </Button>
           </DialogClose>

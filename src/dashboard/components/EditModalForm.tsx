@@ -16,7 +16,6 @@ import axios from "axios"
 import { FileEdit, RefreshCcw } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import formatDate from "../utils/formatDate"
 
 interface EditModalFormProps {
   product: Product;
@@ -47,13 +46,22 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
 
   const handleCalculatePrice = () => {
     const newPrice = formData.price * (1 + formData.percentageIncrease! / 100);
+
+    // Redondeo personalizado
+    const roundedPrice = Math.abs(newPrice) % 1 >= 0.5 ? Math.ceil(newPrice) : Math.floor(newPrice);
+  
     setFormData(prevFormData => ({
       ...prevFormData,
-      price: newPrice,
+      price: roundedPrice,
     }));
 
-    toast("¡Precio actualizado!", {
-      description: `El nuevo precio es ${newPrice}`,
+    toast.success("¡Precio actualizado!",  {
+      description: `El nuevo precio es ${roundedPrice}`,
+      style: {
+        background: "#0F172A"
+      },
+      position: "bottom-center",
+      duration: 1500
     });
   };
 
@@ -64,13 +72,7 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
         handleSuccess();
         console.log("Product updated successfully");
         setTimeout(() => {
-          toast("¡Producto actualizado exitosamente!", {
-            description: `Actualizado el ${formattedDate}`,
-            // action: {
-            //   label: "Entendido!",
-            //   onClick: () => console.log("Undo"),
-            // },
-          })
+          toast.success("¡Producto actualizado exitosamente!", { style: {background: "#0F172A"} })
         }, 130); 
       } else {
         throw new Error("Failed to update product");
@@ -80,9 +82,6 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
     }
   };
 
-  const currentDate = new Date();
-  const formattedDate = formatDate(currentDate);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -91,6 +90,7 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
           size={24}
         />
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-col gap-3">
           <DialogTitle>EDITAR PRODUCTO</DialogTitle>
@@ -98,6 +98,7 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
             Realiza cambios en tus productos aquí. Haz click en <span className="font-semibold">CREAR PRODUCTO</span> cuando hayas terminado.
           </DialogDescription>
         </DialogHeader>
+
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
@@ -178,12 +179,17 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
                 className="w-full"
               />
             </div>
-            <Button variant="update" size="icon" onClick={handleCalculatePrice}>
-              <RefreshCcw />
+            
+            <Button className="col-span-2" variant="update" size="lg" onClick={handleCalculatePrice}>
+              <div className="flex flex-row gap-2">
+                <RefreshCcw />
+                <span>Actualizar precio</span>
+              </div>
             </Button>
           </div>
 
         </div>
+
         <DialogFooter>
 
           <DialogClose asChild>

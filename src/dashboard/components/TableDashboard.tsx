@@ -9,6 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 import EditModalForm from "./EditModalForm";
 import DeleteModalForm from "./DeleteModalForm";
 
@@ -48,14 +55,45 @@ const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
               <TableCell className="text-center">${formatPrice(product.price)}</TableCell>
               <TableCell className="text-center">
                 <div className="flex justify-center gap-4">
-                  <EditModalForm 
+
+                  {/* <EditModalForm 
                     product={product}
                     handleSuccess={handleSuccess}
                   />
+
                   <DeleteModalForm
                     productId={product.id}
                     handleSuccess={handleSuccess}
-                  />
+                  /> */}
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <EditModalForm 
+                          product={product}
+                          handleSuccess={handleSuccess}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Editar producto</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <DeleteModalForm
+                          productId={product.id}
+                          handleSuccess={handleSuccess}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Eliminar producto</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
                 </div>
               </TableCell>
             </TableRow>
