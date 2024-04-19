@@ -15,8 +15,6 @@ import DeleteModalForm from "./DeleteModalForm";
 interface TableModalFormProps {
   products      : Product[];
   handleSuccess : () => void;
-  // onDeleteSuccess : () => void;
-  // onEditSuccess : () => void;
 }
 
 const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
@@ -53,12 +51,10 @@ const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
                   <EditModalForm 
                     product={product}
                     handleSuccess={handleSuccess}
-                    // onEditSuccess={onEditSuccess}
                   />
                   <DeleteModalForm
                     productId={product.id}
                     handleSuccess={handleSuccess}
-                    // onDeleteSuccess={onDeleteSuccess}
                   />
                 </div>
               </TableCell>

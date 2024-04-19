@@ -13,20 +13,29 @@ import { Label } from "@/components/ui/label"
 import { Product } from "@/interfaces/products-interface"
 import { DialogClose } from "@radix-ui/react-dialog"
 import axios from "axios"
-import { FileEdit } from "lucide-react"
-import { useState } from "react"
+import { FileEdit, RefreshCcw } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import formatDate from "../utils/formatDate"
 
 interface EditModalFormProps {
   product: Product;
   handleSuccess: () => void;
-  // onEditSuccess: () => void;
 }
 
 const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
 
   const [formData, setFormData] = useState<Product>({
     ...product,
+    percentageIncrease: 0,
   });
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      percentageIncrease: 0,
+    }));
+  }, [product]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,20 +45,43 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
     }));
   };
 
-  const handleEditProduct = () => {
-    axios
-      .put(`http://localhost:3000/products/${product.id}`, formData)
-      .then((response) => {
-        if (response.status === 200) {
-          handleSuccess();
-          // onEditSuccess();
-          console.log("Product updated successfully");
-        } else {
-          throw new Error("Failed to update product");
-        }
-      })
-      .catch((error) => console.error("Error updating product:", error));
+  const handleCalculatePrice = () => {
+    const newPrice = formData.price * (1 + formData.percentageIncrease! / 100);
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      price: newPrice,
+    }));
+
+    toast("¡Precio actualizado!", {
+      description: `El nuevo precio es ${newPrice}`,
+    });
   };
+
+  const handleEditProduct = async () => {
+    try {
+      const response = await axios.put(`http://localhost:3000/products/${product.id}`, formData);
+      if (response.status === 200) {
+        handleSuccess();
+        console.log("Product updated successfully");
+        setTimeout(() => {
+          toast("¡Producto actualizado exitosamente!", {
+            description: `Actualizado el ${formattedDate}`,
+            // action: {
+            //   label: "Entendido!",
+            //   onClick: () => console.log("Undo"),
+            // },
+          })
+        }, 130); 
+      } else {
+        throw new Error("Failed to update product");
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const currentDate = new Date();
+  const formattedDate = formatDate(currentDate);
 
   return (
     <Dialog>
@@ -128,9 +160,29 @@ const EditModalForm = ({ product, handleSuccess }: EditModalFormProps) => {
               name="price"
               value={formData.price}
               onChange={handleChange}
-              className="col-span-3"
+              className="col-span-2"
             />
           </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="percentageIncrease" className="text-right">
+              % de aumento
+            </Label>
+            <div className="col-span-1 flex items-center">
+              <Input
+                type="number"
+                id="percentageIncrease"
+                name="percentageIncrease"
+                value={formData.percentageIncrease}
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+            <Button variant="update" size="icon" onClick={handleCalculatePrice}>
+              <RefreshCcw />
+            </Button>
+          </div>
+
         </div>
         <DialogFooter>
 

@@ -2,7 +2,6 @@ import CreateModalForm from "./CreateModalForm"
 
 interface NavbarDashboardProps {
   handleSuccess : () => void;
-  // onCreateSuccess : () => void;
 }
 
 const NavbarDashboard = ({ handleSuccess }: NavbarDashboardProps) => {
@@ -14,7 +13,6 @@ const NavbarDashboard = ({ handleSuccess }: NavbarDashboardProps) => {
         </h4>
         <CreateModalForm
           handleSuccess={handleSuccess}
-          // onCreateSuccess={onCreateSuccess}
         />
       </div>
   </div>

@@ -12,6 +12,8 @@ import {
 import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import formatDate from "../utils/formatDate";
 
 interface DeleteModalFormProps {
   productId: string;
@@ -19,8 +21,12 @@ interface DeleteModalFormProps {
 }
 
 const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => {
+  
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const currentDate = new Date();
+  const formattedDate = formatDate(currentDate);
 
   const handleDeleteProduct = async () => {
     setIsDeleting(true);
@@ -30,7 +36,17 @@ const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => 
       const response = await axios.delete(`http://localhost:3000/products/${productId}`);
       if (response.status === 200) {
         handleSuccess();
-        console.log('Product deleted successfully');
+        console.log('Producto eliminado exitosamente');
+
+        setTimeout(() => {
+          toast("¡Producto eliminado exitosamente!", {
+            description: `Creado el ${formattedDate}`,
+            // action: {
+            //   label: "Entendido!",
+            //   onClick: () => console.log("Undo"),
+            // },
+          })
+        }, 130); 
       } else {
         throw new Error('Failed to delete product');
       }
@@ -58,7 +74,8 @@ const DeleteModalForm = ({ productId, handleSuccess }: DeleteModalFormProps) => 
         <DialogFooter>
           <DialogClose asChild>
             <Button type="submit" onClick={handleDeleteProduct} disabled={isDeleting}>
-              {isDeleting ? 'Eliminando...' : 'ELIMINAR PRODUCTO'}
+              {/* {isDeleting ? 'Eliminando...' : 'ELIMINAR PRODUCTO'} */}
+              ELIMINAR PRODUCTO
             </Button>
           </DialogClose>
           {error && <p className="text-red-500">{error}</p>}

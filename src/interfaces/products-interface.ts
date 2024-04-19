@@ -3,10 +3,11 @@ export interface ProductData {
 }
 
 export interface Product {
-  id       : string;
-  name     : string;
-  capacity : number;
-  height   : number;
-  diameter : number;
-  price    : number;
+  id                  : string;
+  name                : string;
+  capacity            : number;
+  height              : number;
+  diameter            : number;
+  price               : number;
+  percentageIncrease? : number;
 }

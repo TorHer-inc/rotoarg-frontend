@@ -10,16 +10,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import axios from "axios";
 
 const TableProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/products')
-      .then(response => response.json())
-      .then(data => setProducts(data.products))
-      .catch(error => console.error('Error fetching products:', error));
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/products');
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('es-ES');
