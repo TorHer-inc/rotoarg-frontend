@@ -26,8 +26,12 @@ interface TableModalFormProps {
 
 const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
 
-  const formatPrice = (price: number) => {
-    return price.toLocaleString('es-ES');
+  const formatPrice = (price: number): string => {
+    return price.toLocaleString('es-ES', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+      useGrouping: true,
+    });
   };
 
   return (
@@ -55,16 +59,6 @@ const TableDashboard = ({ products, handleSuccess }: TableModalFormProps) => {
               <TableCell className="text-center">${formatPrice(product.price)}</TableCell>
               <TableCell className="text-center">
                 <div className="flex justify-center gap-4">
-
-                  {/* <EditModalForm 
-                    product={product}
-                    handleSuccess={handleSuccess}
-                  />
-
-                  <DeleteModalForm
-                    productId={product.id}
-                    handleSuccess={handleSuccess}
-                  /> */}
 
                   <TooltipProvider>
                     <Tooltip>

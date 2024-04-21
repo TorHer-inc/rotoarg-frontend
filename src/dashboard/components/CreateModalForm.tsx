@@ -16,6 +16,8 @@ import { Plus } from "lucide-react"
 import { useState } from "react"
 import CreateFormValidator from "../validators/CreateFormValidator"
 import { toast } from "sonner"
+import isValidInput from "../validators/InputValidators"
+// import isValidInput from "../validators/InputValidators"
 
 interface CreateModalFormProps {
   handleSuccess : () => void;
@@ -27,10 +29,10 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
 
   const [formData, setFormData] = useState({
     name     : "",
-    capacity : "",
-    height   : "",
-    diameter : "",
-    price    : "",
+    capacity : 0,
+    height   : 0,
+    diameter : 0,
+    price    : 0,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,7 +40,11 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-  // Utiliza el valor más reciente de formData al ejecutar la validación
+    if (!isValidInput(name, value)) {
+      return;
+    }
+
+    // Utiliza el valor más reciente de formData al ejecutar la validación
     const updatedFormData = {
       ...formData,
       [name]: value,
@@ -65,29 +71,15 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
         console.log("Producto creado exitosamente");
         setFormData({
           name     : "",
-          capacity : "",
-          height   : "",
-          diameter : "",
-          price    : "",
+          capacity : 0,
+          height   : 0,
+          diameter : 0,
+          price    : 0,
         });
 
         setTimeout(() => {
           toast.success("¡Producto creado exitosamente!", { style: {background: "#0F172A"} })
         }, 130); 
-        
-        // toast.success(`¡Producto creado exitosamente el ${formattedDate}!`);
-
-        // toast("¡Producto creado exitosamente!", {
-        //   description: `Creado el ${formattedDate}`,
-        // })
-        
-        // toast.success(`¡Producto creado exitosamente el ${formattedDate}!`, {
-        //   description: "Ahora mismo",
-        //   action: {
-        //     label: "Undo",
-        //     onClick: () => console.log("Undo"),
-        //   },
-        // });
       } else {
         throw new Error("Fallo al crear el producto");
       }
@@ -97,6 +89,12 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
   };
 
   const isSubmitDisabled = Object.values(formData).some(val => !val) || Object.values(errors).some(val => val);
+
+  const formatPrice = (price: number): string => {
+    const parts = price.toLocaleString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return `$${parts.join(".")}`;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -118,6 +116,7 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
           </DialogDescription>
         </DialogHeader>
 
+        {/* CREATE FORM*/}
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-x-4 gap-y-1">
             <Label htmlFor="name" className="text-right">
@@ -175,18 +174,24 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
             {errors.diameter && <span className="text-red-500 col-span-3 col-start-2">{errors.diameter}</span>}
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-x-4 gap-y-1">
-            <Label htmlFor="price" className="text-right">
+          <div className="grid grid-cols-8 items-center gap-x-4 gap-y-1">
+            <Label htmlFor="price" className="text-right col-span-2">
               Precio
             </Label>
+
             <Input
               id="price"
               name="price"
               value={formData.price}
               onChange={handleChange}
-              className="col-span-3"
+              className="col-span-3 col-start-3"
             />
-            {errors.price && <span className="text-red-500 col-span-3 col-start-2">{errors.price}</span>}
+            
+            <div className="col-span-3 col-start-6 cursor-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors bg-[#0F172A] text-white h-10 px-4 py-2">
+              {formatPrice(formData.price)}
+            </div>
+
+            {errors.price && <span className="text-red-500 col-span-full col-start-3">{errors.price}</span>}
           </div>
         </div>
 

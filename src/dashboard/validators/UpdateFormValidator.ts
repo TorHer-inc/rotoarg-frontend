@@ -1,9 +1,10 @@
 interface FormData {
-  name     : string;
-  capacity : number | string;
-  height   : number | string;
-  diameter : number | string;
-  price    : number | string;
+  name                : string;
+  capacity            : number;
+  height              : number;
+  diameter            : number;
+  price               : number;
+  percentageIncrease? : number;
 }
 
 export default function UpdateFormValidator(input: FormData): Record<string, string> {
@@ -66,6 +67,11 @@ export default function UpdateFormValidator(input: FormData): Record<string, str
       errors.price = "El precio ingresado es inválido. Asegúrate de que esté dentro del rango permitido (de 1 a 99,999,999).";
     }
   }
+
+  // Validación del aumento porcentual
+  // if (input.percentageIncrease && input.percentageIncrease.toString().length > 4) {
+  //   errors.percentageIncrease = "El % de aumento no puede tener más de 4 caracteres";
+  // }
 
   return errors;
 }

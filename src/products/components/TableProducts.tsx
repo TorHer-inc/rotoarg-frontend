@@ -47,6 +47,26 @@ const TableProducts = () => {
         </TableHeader>
 
         <TableBody>
+          <TableRow className="sm:text-lg">
+            <TableCell className="font-medium">ROTOARG TANQUE MODAL</TableCell>
+            <TableCell className="text-center">413 lts</TableCell>
+            <TableCell className="text-center">413 mm</TableCell>
+            <TableCell className="text-center">413 mm</TableCell>
+            <TableCell className="text-center">$132.323</TableCell>
+          </TableRow>
+        </TableBody>
+
+        <TableBody>
+          <TableRow className="sm:text-lg">
+            <TableCell className="font-medium">ROTOARG TANQUE MODAL</TableCell>
+            <TableCell className="text-center">413 lts</TableCell>
+            <TableCell className="text-center">413 mm</TableCell>
+            <TableCell className="text-center">413 mm</TableCell>
+            <TableCell className="text-center">$132.323</TableCell>
+          </TableRow>
+        </TableBody>
+
+        <TableBody>
           {products.map((product) => (
             <TableRow className="sm:text-lg" key={product.id}>
               <TableCell className="font-medium">{product.name}</TableCell>
