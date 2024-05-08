@@ -10,14 +10,18 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
 import { DialogClose } from "@radix-ui/react-dialog"
-import axios from "axios"
+
 import { Plus } from "lucide-react"
+
 import { useState } from "react"
+import axiosInstance from "@/hooks/axiosInstance"
+
 import CreateFormValidator from "../validators/CreateFormValidator"
-import { toast } from "sonner"
 import isValidInput from "../validators/InputValidators"
-// import isValidInput from "../validators/InputValidators"
+
+import { toast } from "sonner"
 
 interface CreateModalFormProps {
   handleSuccess : () => void;
@@ -65,7 +69,8 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/products", formData);
+      const response = await axiosInstance.post("/products", formData);
+
       if (response.status === 201) {
         handleSuccess();
         console.log("Producto creado exitosamente");
@@ -95,7 +100,7 @@ const CreateModalForm = ({ handleSuccess }: CreateModalFormProps) => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `$${parts.join(".")}`;
   };
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>

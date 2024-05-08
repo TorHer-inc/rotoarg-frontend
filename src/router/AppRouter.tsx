@@ -1,8 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import LoginPage from '../auth/pages/LoginPage'
-import DashboardPage from '../dashboard/pages/DashboardPage'
-import ProductsRoutes from '../products/routes/ProductsRoutes'
-import NotFoundPage from '../NotFound/pages/NotFoundPage';
+import HomePage from '@/pages/home/pages/HomePage';
+import NotFoundPage from '@/pages/NotFound/pages/NotFoundPage';
+import LoginPage from '@/pages/auth/pages/LoginPage';
+import DashboardPage from '@/pages/dashboard/pages/DashboardPage';
+import ProductsListPrices from '@/pages/productsListPrices/pages/ProductsListPrices';
+import { ProtectedRoute } from '@/ProtectedRoute';
+import ContactPage from '@/pages/contact/ContactPage';
+import ProductsDetailPage from '@/pages/productsDetail/pages/ProductDetailPage';
+import ProductsPage from '@/pages/products/pages/ProductsPage';
 
 const AppRouter = () => {
 
@@ -11,13 +16,16 @@ const AppRouter = () => {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Navigate to="/products" />} />
+        <Route path={`/iniciar-sesion-${token}`} element={<LoginPage />} />
+        <Route path='/' element={<HomePage />} />
+        <Route path='/productos' element={<ProductsPage />} />
+        <Route path='/productos/:id' element={<ProductsDetailPage />} />
+        <Route path='/lista-de-precios' element={<ProductsListPrices />} />
+        <Route path='/contacto' element={<ContactPage />} />
 
-        <Route path='/products/*' element={<ProductsRoutes />} />
-
-        <Route path={`/login-${token}`} element={<LoginPage />} />
-
-        <Route path='/dashboard' element={<DashboardPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='/dashboard' element={<DashboardPage />} />
+        </Route>
         
         <Route path='/404' element={<NotFoundPage />} />
         <Route path="/*" element={ <Navigate to="/404" replace />} />

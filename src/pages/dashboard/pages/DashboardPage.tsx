@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import NavbarDashboard from "../components/NavbarDashboard"
 import TableDashboard from "../components/TableDashboard"
 import { Product } from "@/interfaces/products-interface";
-import axios from "axios";
 import { Toaster } from "sonner";
+import axiosInstance from "@/hooks/axiosInstance";
 
 const DashboardPage = () => {
 
@@ -15,7 +15,7 @@ const DashboardPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/products');
+      const response = await axiosInstance.get('/products/all');
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);

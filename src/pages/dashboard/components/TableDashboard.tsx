@@ -1,5 +1,3 @@
-import { Product } from '../../interfaces/products-interface';
-
 import {
   Table,
   TableBody,
@@ -18,6 +16,7 @@ import {
 
 import EditModalForm from "./EditModalForm";
 import DeleteModalForm from "./DeleteModalForm";
+import { Product } from "@/interfaces/products-interface";
 
 interface TableModalFormProps {
   products      : Product[];

@@ -1,20 +1,11 @@
 import axios from "axios";
-import TableProducts from "../components/TableProducts"
 import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import TableProducts from "@/pages/products/components/TableProducts";
+import Footer from "@/components/Footer";
 
-const ProductsPage = () => {
+const ProductsListPrices = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
-
-  // useEffect(() => {
-  //   // Hacer una solicitud al backend para obtener la fecha de la última actualización
-  //   axios.get('http://localhost:3000/products/last-updated')
-  //     .then(response => {
-  //       setLastUpdated(response.data.lastUpdated);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error al obtener la fecha de la última actualización:', error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     fetchLastUpdatedDate();
@@ -31,7 +22,7 @@ const ProductsPage = () => {
   };
 
   const handleDownloadPDF = () => {
-    axios.get('http://localhost:3000/products/lista', { responseType: 'blob' })
+    axios.get('http://localhost:3000/products/lista-productos-pdf', { responseType: 'blob' })
       .then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -46,15 +37,23 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="pt-10 max-w-[1420px] flex flex-col mx-auto gap-8 p-6">
-      <div>
-        <button onClick={handleDownloadPDF}>Descargar PDF de Productos</button>
-        {lastUpdated && <p>Última actualización: {new Date(lastUpdated).toLocaleString()}</p>}
+    <div>
+      <Navbar />
+      <div className="max-w-[1420px] min-h-screen flex flex-col mx-auto gap-8 pt-10 p-6">
+        <div className="flex flex-col gap-3 justify-center items-center">
+          <h1 className="font-bold text-4xl">Lista de precios RotoArg</h1>
+          <div className="flex flex-col">
+            <button onClick={handleDownloadPDF}>Descargar PDF de Productos</button>
+            {lastUpdated && <p>Última actualización: {new Date(lastUpdated).toLocaleString()}</p>}
+          </div>
+        </div>
+
+        <TableProducts />
       </div>
-      <h1 className="text-center font-bold text-4xl" >Lista de precios RotoArg</h1>
-      <TableProducts />
+      <Footer />
+
     </div>
   )
 }
 
-export default ProductsPage
+export default ProductsListPrices

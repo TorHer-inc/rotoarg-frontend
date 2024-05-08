@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-
-import { Product } from '../../interfaces/products-interface';
-
 import {
   Table,
   TableBody,
@@ -10,7 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import axios from "axios";
+
+import { useEffect, useState } from "react";
+import { Product } from "@/interfaces/products-interface";
+import axiosInstance from "@/hooks/axiosInstance";
 
 const TableProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -21,7 +20,7 @@ const TableProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/products');
+      const response = await axiosInstance.get('/products/all');
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -35,7 +34,6 @@ const TableProducts = () => {
   return (
     <div>
       <Table>
-
         <TableHeader className="bg-orange-200">
           <TableRow className="sm:text-xl">
             <TableHead className="text-center">PRODUCTO</TableHead>
